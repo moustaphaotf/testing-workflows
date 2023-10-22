@@ -46,7 +46,7 @@ jobs:
             context= echo "@$username has made changes on the original english version of the book ($event_type #${pr_number:-N/A})"
             
             # Generate a visual diff of the changes in the "en/" folder.
-            message="$(echo $context))\n\nVisual Diff of Changes:\n\n\`\`\`diff\n$(git diff HEAD~1 main -- 'en/')\n\`\`\`"
+            message="$context\n\nVisual Diff of Changes:\n\n\`\`\`diff\n$(git diff HEAD~1 main -- 'en/')\n\`\`\`"
             
             echo "ISSUE_BODY<<EOF" >> "$GITHUB_OUTPUT"
             echo -e "$message" >> "$GITHUB_OUTPUT"
