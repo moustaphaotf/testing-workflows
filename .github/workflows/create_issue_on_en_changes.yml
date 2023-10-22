@@ -22,7 +22,7 @@ jobs:
           echo "No changes in the 'en/' folder."
         else
           # Generate a visual diff of the changes in the "en/" folder.
-          git diff HEAD^ HEAD 'en/' > ./visual_diff
+          git diff HEAD^ HEAD -- 'en/' > ./visual_diff
         fi
 
     - name: Create Issue with Visual Diff
