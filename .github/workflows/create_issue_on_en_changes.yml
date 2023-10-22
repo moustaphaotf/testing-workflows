@@ -42,7 +42,7 @@ jobs:
             echo "Issue is being generated" >> $GITHUB_STEP_SUMMARY
           fi
 
-      - name: Create team sync issue
+      - name: Creating an issue on en/ folder changes
         uses: imjohnbo/issue-bot@3d96848fb5e9a4a473bb81ae62b4b4866a56e93a
         if: ${{ steps.diff_generator.outputs.SHOULD_ISSUE == '1' }}
         with:
