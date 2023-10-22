@@ -30,16 +30,6 @@ jobs:
             echo "No changes in the 'en/' folder." >> $GITHUB_STEP_SUMMARY
             echo "SHOULD_ISSUE=0" >> "$GITHUB_OUTPUT"
           else
-            # Generate a visual diff of the changes in the "en/" folder.
-            message="Visual Diff of Changes:\n\n\`\`\`diff\n$(git diff HEAD~1 main -- 'en/')\n\`\`\`"
-            
-            echo "ISSUE_BODY<<EOF" >> "$GITHUB_OUTPUT"
-            echo -e "$message" >> "$GITHUB_OUTPUT"
-            echo "EOF" >> "$GITHUB_OUTPUT"
-            echo "SHOULD_ISSUE=1" >> "$GITHUB_OUTPUT"
-            
-            echo "Issue is being generated" >> $GITHUB_STEP_SUMMARY
-            
             # Getting the use who initiated the changes
             username="${{ github.event.sender.login }}"
 
@@ -53,7 +43,17 @@ jobs:
             # Get the PR number if available
             pr_number="${{ github.event.pull_request.number }}"
 
-            echo "TITLE=Translation needed by @$username ($event_type #${pr_number:-N/A})" >> "$GITHUB_OUTPUT"
+            context= "@$username has made changes on the original english version of the book ($event_type #${pr_number:-N/A})" >> "$GITHUB_OUTPUT"
+            
+            # Generate a visual diff of the changes in the "en/" folder.
+            message="$context\n\nVisual Diff of Changes:\n\n\`\`\`diff\n$(git diff HEAD~1 main -- 'en/')\n\`\`\`"
+            
+            echo "ISSUE_BODY<<EOF" >> "$GITHUB_OUTPUT"
+            echo -e "$message" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
+            echo "SHOULD_ISSUE=1" >> "$GITHUB_OUTPUT"
+            
+            echo "Issue is being generated"
           fi
 
       - name: Creating an issue on en/ folder changes
@@ -61,7 +61,7 @@ jobs:
         if: ${{ steps.diff_generator.outputs.SHOULD_ISSUE == '1' }}
         with:
           labels: "translate help-wanted"
-          title: ${{ steps.diff_generator.outputs.TITLE }}
+          title: "Translation needed for existing languages (changes made to the original version)"
           body: |
             ${{ steps.diff_generator.outputs.ISSUE_BODY }}
           pinned: false
