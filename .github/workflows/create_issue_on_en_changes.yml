@@ -47,12 +47,12 @@ jobs:
           
           # Send a POST request to create the issue
           response=$(curl -X POST -d "$issue_data" "$url")
-          link_to_issue = $(echo $response | jq -r '.html_url')
-          echo "Link to issue: $link_to_issue"
+
+          echo $response
 
           # Check the response
           # If the html_url field exists in response data, the issue has been posted
-          if [ "$link_to_issue" ] ; then
+          if [ $(echo $response | jq -r '.html_url') ]; then
             echo "Issue created successfully"
           else
             echo "Error: Failed to create the issue"
