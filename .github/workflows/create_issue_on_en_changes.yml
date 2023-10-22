@@ -15,20 +15,33 @@ jobs:
       with:
           node-version: 16
 
+    - name: Check out pull request branch
+      run: |
+        git clone https://github.com/$GITHUB_REPOSITORY.git base-branch
+        cd base-branch
+        git checkout $GITHUB_BASE_REF
+        cd ..
+
+    - name: Check out base branch
+      run: |
+        git clone https://github.com/$GITHUB_EVENT_PATH.git pull-request-branch
+        cd pull-request-branch
+        git checkout $GITHUB_HEAD_REF
+        cd ..
+
     - name: Generate Visual Diff
       run: |
         set -e
         set -o pipefail
 
-        # Fetch the latest code from the "main" branch
-        git fetch origin main
+        git checkout $GITHUB_BASE_REF
 
         # Check if changes were made to the "en/" folder
-        if git diff --quiet main...$GITHUB_HEAD_REF -- 'en/'; then
+        if git diff --quiet base-branch pull-request-branch -- 'en/'; then
           echo "No changes in the 'en/' folder."
         else
           # Generate a visual diff of the changes in the "en/" folder.
-          git diff main...$GITHUB_HEAD_REF -- 'en/' > ./visual_diff
+          git diff base-branch pull-request-branch -- 'en/' > ./visual_diff
         fi
 
     - name: Create Issue with Visual Diff
@@ -57,8 +70,9 @@ jobs:
             exit 1
           fi
 
-          # Delete the visual_diff file
+          # Delete generated files and folders
           rm visual_diff
+          rm -rf base-branch pull-request-branch
         else
           echo "No changes in the 'en/' folder."
         fi
