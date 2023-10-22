@@ -50,9 +50,8 @@ jobs:
           labels: "translate help-wanted"
           title: "Translation needed"
           body: |
-            $ISSUE_BODY
+            ${{ steps.diff_generator.outputs.ISSUE_BODY }}
           pinned: false
           close-previous: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          ISSUE_BODY: ${{ steps.diff_generator.outputs.ISSUE_BODY }}
