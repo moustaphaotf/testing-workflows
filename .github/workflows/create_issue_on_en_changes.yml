@@ -30,25 +30,28 @@ jobs:
           set -o pipefail
           # Check if changes were made to the "en/" folder
           if git diff --quiet HEAD~1 main -- 'en/'; then
-            echo "No changes in the 'en/' folder."
-            echo "should_issue=0" >> "$GITHUB_OUTPUT"
+            echo "No changes in the 'en/' folder." >> $GITHUB_STEP_SUMMARY
+            echo "SHOULD_ISSUE=0" >> "$GITHUB_OUTPUT"
           else
             # Generate a visual diff of the changes in the "en/" folder.
             message="Visual Diff of Changes:\n\n\`\`\`diff\n$(git diff HEAD~1 main -- 'en/')\n\`\`\`"
-            echo "issue_body=$message" >> "$GITHUB_OUTPUT"
-            echo "should_issue=1" >> "$GITHUB_OUTPUT"
+            echo "ISSUE_BODY=$message" >> "$GITHUB_OUTPUT"
+            echo "SHOULD_ISSUE=1" >> "$GITHUB_OUTPUT"
+            echo "Issue is being generated" >> $GITHUB_STEP_SUMMARY
           fi
 
       - name: Create team sync issue
         uses: imjohnbo/issue-bot@3d96848fb5e9a4a473bb81ae62b4b4866a56e93a
-        if: ${{ steps.diff_generator.outputs.should_issue == 1 }}
+        if: ${{ steps.diff_generator.outputs.SHOULD_ISSUE == 1 }}
         with:
           assignees: "moustaphaotf"
           labels: "translate help-wanted"
           title: "Translation needed"
           body: |
-            ${{ steps.diff_generator.outputs.issue_body }}
+            ${{ steps.diff_generator.outputs.ISSUE_BODY }}
           pinned: false
           close-previous: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SHOULD_ISSUE: ${{ steps.diff_generator.outputs.SHOULD_ISSUE == 1 }}
+          ISSUE_BODY: ${{ steps.diff_generator.outputs.ISSUE_BODY}}
