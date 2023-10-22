@@ -65,7 +65,7 @@ jobs:
         with:
           assignees: "moustaphaotf"
           labels: "translate help-wanted"
-          title: "Translation needed by @$username ($event_type #${pr_number:-N/A})"
+          title: "Translation needed by @${username} (${event_type} #${pr_number:-N/A})"
           body: |
             ${{ steps.diff_generator.outputs.ISSUE_BODY }}
           pinned: false

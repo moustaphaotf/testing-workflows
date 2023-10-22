@@ -9,6 +9,6 @@ Languages: JS | PHP | HTML | CSS | C | CPP | PY | SQL
 Frameworks / Libraries: NodeJS | Express | React | Bootstrap | Tailwind CSS
 Tools: 
     Database: MYSQL | MS Access
-    Cloud Computing: EC2, RDS, AppSync
+    Cloud Computing: EC2, RDS, AppSync, Communication
 
 You can ping me at moustaphaotf@gmail.com
