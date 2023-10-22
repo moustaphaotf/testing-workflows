@@ -31,12 +31,12 @@ jobs:
           # Check if changes were made to the "en/" folder
           if git diff --quiet HEAD~1 main -- 'en/'; then
             echo "No changes in the 'en/' folder." >> $GITHUB_STEP_SUMMARY
-            echo "SHOULD_ISSUE=0" >> "$GITHUB_OUTPUT"
+            echo "SHOULD_ISSUE=0" >> "$GITHUB_ENV"
           else
             # Generate a visual diff of the changes in the "en/" folder.
             message="Visual Diff of Changes:\n\n\`\`\`diff\n$(git diff HEAD~1 main -- 'en/')\n\`\`\`"
-            echo "ISSUE_BODY=$message" >> "$GITHUB_OUTPUT"
-            echo "SHOULD_ISSUE=1" >> "$GITHUB_OUTPUT"
+            echo "ISSUE_BODY=$message" >> "$GITHUB_ENV"
+            echo "SHOULD_ISSUE=1" >> "$GITHUB_ENV"
             echo "Issue is being generated" >> $GITHUB_STEP_SUMMARY
           fi
 
@@ -53,5 +53,3 @@ jobs:
           close-previous: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SHOULD_ISSUE: ${{ steps.diff_generator.outputs.SHOULD_ISSUE == 1 }}
-          ISSUE_BODY: ${{ steps.diff_generator.outputs.ISSUE_BODY}}
