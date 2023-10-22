@@ -8,9 +8,11 @@ on:
     types:
       - closed
 
+permissions:
+  issues: write
 
 jobs:
-  create-issue:
+  create-issue-on-english-changes:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,25 +22,23 @@ jobs:
           fetch-depth: 2
 
     - name: Generate Visual Diff
-      id: generate
       run: |
         set -e
         set -o pipefail
         # Check if changes were made to the "en/" folder
         if git diff --quiet HEAD~1 main -- 'en/'; then
           echo "No changes in the 'en/' folder."
-          echo "::set-output name=changes-exists::false"
         else
           # Generate a visual diff of the changes in the "en/" folder.
-          echo "::set-output name=changes-exists::true"
-          message="Visual Diff of Changes:\n\n\`\`\`\n$(git diff HEAD~1 main -- 'en/')\n\`\`\`"
-          echo "::set-output name=content::$message"
+          message="Visual Diff of Changes:\n\n\`\`\`diff\n$(git diff HEAD~1 main -- 'en/')\n\`\`\`"
+          echo $message > ./visual_diffs
         fi
 
-
-    - name: Create Issue
-      if: steps.generate.changes-exists == 'true'
-      uses: actions/create-issue@v1
+    - name: Create new issue
+      uses: imjohnbo/issue-bot@v3
       with:
-        title: Translation needed
-        body: ${{ steps.generate.outputs.content }}
+        assignees: "octocat, monalisa"
+        title: Hello, world
+        body: |-
+          :wave: Hi, {{#each assignees}}@{{this}}{{#unless @last}}, {{/unless}}{{/each}}!
+        pinned: true
