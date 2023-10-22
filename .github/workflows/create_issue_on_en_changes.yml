@@ -1,9 +1,6 @@
 name: Trigger Issue on English Changes with Visual Diff
 
 on:
-  push:
-    branches:
-      - main
   pull_request:
     types:
       - closed
@@ -47,7 +44,7 @@ jobs:
             echo "username=${{ github.event.sender.login }}" >> "$GITHUB_ENV"
 
             # Getting the event type
-            if [ "${{ github.event_name }}" == "push"]; then
+            if [ "${{ github.event_name }}" == "push" ]; then
               event_type="<Push"
             else
               event_type="PR"
@@ -63,9 +60,8 @@ jobs:
         uses: imjohnbo/issue-bot@3d96848fb5e9a4a473bb81ae62b4b4866a56e93a
         if: ${{ steps.diff_generator.outputs.SHOULD_ISSUE == '1' }}
         with:
-          assignees: "moustaphaotf"
           labels: "translate help-wanted"
-          title: "Translation needed by @$username ($event_type #${pr_number:-N/A})"
+          title: "Translation needed by @${username} ($event_type #${pr_number:-N/A})"
           body: |
             ${{ steps.diff_generator.outputs.ISSUE_BODY }}
           pinned: false
