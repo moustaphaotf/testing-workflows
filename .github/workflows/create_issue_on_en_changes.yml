@@ -52,7 +52,7 @@ jobs:
 
           # Check the response
           # If the html_url field exists in response data, the issue has been posted
-          if $link_to_issue ; then
+          if [ "$link_to_issue" ] ; then
             echo "Issue created successfully"
           else
             echo "Error: Failed to create the issue"
