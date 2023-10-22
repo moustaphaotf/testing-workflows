@@ -12,32 +12,43 @@ permissions:
   issues: write
 
 jobs:
-  create-issue-on-english-changes:
+  create_issue_on_english_changes:
+    name: Create team sync issue
     runs-on: ubuntu-latest
-
+    permissions:
+      issues: write
     steps:
-    - name: Check out code
-      uses: actions/checkout@v2
-      with:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
           fetch-depth: 2
 
-    - name: Generate Visual Diff
-      run: |
-        set -e
-        set -o pipefail
-        # Check if changes were made to the "en/" folder
-        if git diff --quiet HEAD~1 main -- 'en/'; then
-          echo "No changes in the 'en/' folder."
-        else
-          # Generate a visual diff of the changes in the "en/" folder.
-          message="Visual Diff of Changes:\n\n\`\`\`diff\n$(git diff HEAD~1 main -- 'en/')\n\`\`\`"
-          echo $message > ./visual_diffs
-        fi
+      - name: Generate Visual Diff
+        id: diff_generator
+        run: |
+          set -e
+          set -o pipefail
+          # Check if changes were made to the "en/" folder
+          if git diff --quiet HEAD~1 main -- 'en/'; then
+            echo "No changes in the 'en/' folder."
+            echo "should_issue=0" >> $GITHUB_OUTPUT
+          else
+            # Generate a visual diff of the changes in the "en/" folder.
+            message="Visual Diff of Changes:\n\n\`\`\`diff\n$(git diff HEAD~1 main -- 'en/')\n\`\`\`"
+            echo "issue_body=$message" >> $GITHUB_OUTPUT
+            echo "should_issue=1" >> $GITHUB_OUTPUT
+          fi
 
-    - name: Create new issue
-      uses: imjohnbo/issue-bot@v3
-      with:
-        title: Hello, world
-        body: |-
-          :wave: Hi, all !
-        pinned: true
+      - name: Create team sync issue
+        uses: imjohnbo/issue-bot@3d96848fb5e9a4a473bb81ae62b4b4866a56e93a
+        if: ${{ steps.diff_generator.outputs.should_issue == 1 }}
+        with:
+          assignees: "moustaphaotf"
+          labels: "translate help-wanted"
+          title: "Translation needed"
+          body: |
+            ${{ steps.diff_generator.outputs.issue_body }}
+          pinned: false
+          close-previous: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
