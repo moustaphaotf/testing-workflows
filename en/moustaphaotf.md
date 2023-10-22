@@ -1,3 +1,3 @@
 # Hello there !
 My name is @moustaphaotf
-I'm a Sovtware Developer
+I'm a Software Developer
