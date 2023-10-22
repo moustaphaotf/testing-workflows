@@ -12,9 +12,11 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v2
-      
+
     - name: Generate Visual Diff
       run: |
+        set -e
+        set -o pipefail
         # Check if changes were made to the "en/" folder
         if git diff --quiet HEAD^ HEAD -- 'en/'; then
           echo "No changes in the 'en/' folder."
@@ -25,6 +27,9 @@ jobs:
 
     - name: Create Issue with Visual Diff
       run: |
+        set -e
+        set -o pipefail
+        
         # Check if the visual_diff file exists (indicating changes in "en/").
         if [ -f visual_diff ]; then
           # Define the API endpoint
@@ -52,4 +57,3 @@ jobs:
           echo "No changes in the 'en/' folder."
         fi
       # Add error handling
-      - set -e
