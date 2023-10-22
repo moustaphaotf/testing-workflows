@@ -2,10 +2,12 @@ name: Trigger Issue on English Changes with Visual Diff
 
 on:
   push:
-    paths:
-      - 'en/**'  # Trigger on changes in the "en/" folder
+    branches:
+      - main
+  pull_request:
     types:
       - closed
+
 
 jobs:
   create-issue:
