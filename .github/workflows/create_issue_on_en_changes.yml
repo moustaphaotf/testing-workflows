@@ -15,22 +15,20 @@ jobs:
       with:
           node-version: 16
 
-    - name: Extract Branch Name
-      run: |
-        branch_name=${GITHUB_REF#refs/heads/}
-        echo "The branch name is: $branch_name"
-        
     - name: Generate Visual Diff
       run: |
         set -e
         set -o pipefail
+
+        # Fetch the latest code from the "main" branch
+        git fetch origin main
+
         # Check if changes were made to the "en/" folder
-        if git diff --quiet HEAD^ HEAD -- 'en/'; then
+        if git diff --quiet main...$GITHUB_HEAD_REF -- 'en/'; then
           echo "No changes in the 'en/' folder."
         else
           # Generate a visual diff of the changes in the "en/" folder.
-          echo "bonjour" > test.html
-          git diff HEAD^ HEAD -- 'en/' > ./visual_diff
+          git diff main...$GITHUB_HEAD_REF -- 'en/' > ./visual_diff
         fi
 
     - name: Create Issue with Visual Diff
