@@ -7,5 +7,7 @@ I have worked on projects using :
 
 Languages: JS | PHP | HTML | CSS | C | CPP | PY | SQL
 Frameworks / Libraries: NodeJS | Express | React | Bootstrap | Tailwind CSS
+Tools: 
+    Database: MYSQL | MS Access
 
 You can ping me at moustaphaotf@gmail.com
