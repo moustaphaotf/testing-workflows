@@ -59,7 +59,7 @@ jobs:
           fi
 
           # Delete the visual_diff file
-          rm visual_diff
+          # rm visual_diff
         else
           echo "No changes in the 'en/' folder."
         fi
