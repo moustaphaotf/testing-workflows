@@ -15,16 +15,19 @@ jobs:
       with:
           node-version: 16
 
-    - name: Check out pull request branch
+    - name: Check out base branch
       run: |
         git clone https://github.com/$GITHUB_REPOSITORY.git base-branch
         cd base-branch
         git checkout $GITHUB_BASE_REF
         cd ..
 
-    - name: Check out base branch
+    - name: Check out pull request branch
       run: |
-        git clone https://github.com/$GITHUB_EVENT_PATH.git pull-request-branch
+        # Extract the repository URL
+        PR_REPO_URL=$(jq -r .repository.url $GITHUB_EVENT_PATH)
+
+        git clone https://github.com/$PR_REPO_URL.git pull-request-branch
         cd pull-request-branch
         git checkout $GITHUB_HEAD_REF
         cd ..
