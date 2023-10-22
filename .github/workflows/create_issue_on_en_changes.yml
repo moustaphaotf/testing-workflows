@@ -43,7 +43,7 @@ jobs:
             # Get the PR number if available
             pr_number="${{ github.event.pull_request.number }}"
 
-            context= "@$username has made changes on the original english version of the book ($event_type #${pr_number:-N/A})"
+            context= echo "@$username has made changes on the original english version of the book ($event_type #${pr_number:-N/A})"
             
             # Generate a visual diff of the changes in the "en/" folder.
             message="$(echo $context))\n\nVisual Diff of Changes:\n\n\`\`\`diff\n$(git diff HEAD~1 main -- 'en/')\n\`\`\`"
