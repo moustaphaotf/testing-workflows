@@ -35,11 +35,28 @@ jobs:
           else
             # Generate a visual diff of the changes in the "en/" folder.
             message="Visual Diff of Changes:\n\n\`\`\`diff\n$(git diff HEAD~1 main -- 'en/')\n\`\`\`"
+            
             echo "ISSUE_BODY<<EOF" >> "$GITHUB_OUTPUT"
             echo -e "$message" >> "$GITHUB_OUTPUT"
             echo "EOF" >> "$GITHUB_OUTPUT"
             echo "SHOULD_ISSUE=1" >> "$GITHUB_OUTPUT"
+            
             echo "Issue is being generated" >> $GITHUB_STEP_SUMMARY
+            
+            # Getting the use who initiated the changes
+            echo "username=${{ github.event.sender.login }}" >> "$GITHUB_ENV"
+
+            # Getting the event type
+            if [ "${{ github.event_name }}" == "push"]; then
+              event_type="<Push"
+            else
+              event_type="PR"
+            fi
+            echo "event_type=$event_type" >> "$GITHUB_ENV"
+
+            # Get the PR number if available
+            pr_number=$(echo "${{ github.event.pull_request.number }}")
+            echo "pr_number=$pr_number" >> "$GITHUB_ENV"
           fi
 
       - name: Creating an issue on en/ folder changes
@@ -48,7 +65,7 @@ jobs:
         with:
           assignees: "moustaphaotf"
           labels: "translate help-wanted"
-          title: "Translation needed"
+          title: "Translation needed by @$username ($event_type #${pr_number:-N/A})"
           body: |
             ${{ steps.diff_generator.outputs.ISSUE_BODY }}
           pinned: false
