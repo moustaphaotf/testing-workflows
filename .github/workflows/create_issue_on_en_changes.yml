@@ -41,7 +41,7 @@ jobs:
             echo "Issue is being generated" >> $GITHUB_STEP_SUMMARY
             
             # Getting the use who initiated the changes
-            echo "username=${{ github.event.sender.login }}"
+            username="${{ github.event.sender.login }}"
 
             # Getting the event type
             if [ "${{ github.event_name }}" == "push" ]; then
@@ -51,7 +51,7 @@ jobs:
             fi
 
             # Get the PR number if available
-            pr_number=$(echo "${{ github.event.pull_request.number }}")
+            pr_number="${{ github.event.pull_request.number }}"
 
             echo "TITLE=Translation needed by @$username ($event_type #${pr_number:-N/A})" >> "$GITHUB_OUTPUT"
           fi
