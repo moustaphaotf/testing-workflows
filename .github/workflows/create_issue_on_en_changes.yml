@@ -12,12 +12,7 @@ jobs:
     steps:
     - name: Check out code
       uses: actions/checkout@v2
-
-    - name: Install diff2html
-      run: |
-        # Install diff2html-cli
-        npm install -g diff2html-cli
-
+      
     - name: Generate Visual Diff
       run: |
         # Check if changes were made to the "en/" folder
