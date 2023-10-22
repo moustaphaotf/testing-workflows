@@ -6,6 +6,6 @@ I leave in Guinea, though, I'm open to remote collaboration !
 I have worked on projects using :
 
 Languages: JS | PHP | HTML | CSS | C | CPP | PY
-Frameworks / Libraries: NodeJS | Express | React
+Frameworks / Libraries: NodeJS | Express | React | Bootstrap
 
 You can ping me at moustaphaotf@gmail.com
