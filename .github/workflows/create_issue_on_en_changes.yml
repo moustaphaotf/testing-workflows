@@ -34,14 +34,10 @@ jobs:
             echo "SHOULD_ISSUE=0" >> "$GITHUB_OUTPUT"
           else
             # Generate a visual diff of the changes in the "en/" folder.
-            
+            message="Visual Diff of Changes:`\`\`diff\n$(git diff HEAD~1 main -- 'en/')\`\`\`"
             echo "ISSUE_BODY<<EOF" >> "$GITHUB_OUTPUT"
-            echo "Visual Diff of Changes:" >> "$GITHUB_OUTPUT"
-            echo "```diff" >> "$GITHUB_OUTPUT"
             echo "$message" >> "$GITHUB_OUTPUT"
-            echo "```" >> "$GITHUB_OUTPUT"
             echo "EOF" >> "$GITHUB_OUTPUT"
-
             echo "SHOULD_ISSUE=1" >> "$GITHUB_OUTPUT"
             echo "Issue is being generated" >> $GITHUB_STEP_SUMMARY
           fi
