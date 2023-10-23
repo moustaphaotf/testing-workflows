@@ -10,3 +10,8 @@ Sept immenses tartes
 Huit filet de carpes
 Neuf kilos de pain
 Et j'ai encore faim
+Peut-être ce soir,
+Vais-je devoir manger avec les deux mains
+Pour avoir le ventre enfin bien plein.
+
+Maurice Carème
